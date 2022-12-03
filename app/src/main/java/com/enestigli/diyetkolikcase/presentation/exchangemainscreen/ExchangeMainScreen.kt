@@ -1,7 +1,11 @@
 package com.enestigli.diyetkolikcase.presentation.exchangemainscreen
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.*
@@ -16,16 +20,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.enestigli.diyetkolikcase.R
-import com.enestigli.diyetkolikcase.ui.theme.lightBlue
-import com.enestigli.diyetkolikcase.ui.theme.lightGray
-import com.enestigli.diyetkolikcase.ui.theme.lightGray2
+import com.enestigli.diyetkolikcase.ui.theme.*
 
 
 @Composable
@@ -34,6 +41,9 @@ fun ExchangeMainScreen(
     viewModel: ExchangeMainViewModel = hiltViewModel()
 ) {
 
+
+
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -49,22 +59,25 @@ fun ExchangeMainScreen(
         OutLineTextFieldSample()
         Spacer(modifier = Modifier.padding(5.dp))
 
-        finalAmountTxt(result = " $ 102")
+        FinalAmountTxt(result = " $ 102")
         Spacer(modifier = Modifier.padding(30.dp))
 
-        roundedTxt(base_code = "$", exchange_value = 20.0, exchange_currency = "eur")
+        RoundedTxt(base_code = "$", exchange_value = 20.0, exchange_currency = "eur")
         Spacer(modifier = Modifier.padding(5.dp))
-        ExchangeBtn()
+        ExchangeBtn(context)
+
     }
 
 
 }
 
 @Composable
-fun OutLineTextFieldSample() {
+fun OutLineTextFieldSample(
+    viewModel: ExchangeMainViewModel = hiltViewModel()
+) {
 
-    var text by remember { mutableStateOf(TextFieldValue("")) }
 
+    var outLineTextField by remember { mutableStateOf(TextFieldValue("")) }
 
     OutlinedTextField(
         label = {
@@ -82,21 +95,28 @@ fun OutLineTextFieldSample() {
             cursorColor = MaterialTheme.colors.primaryVariant
         ),
 
-        value = text,
-        onValueChange = { text = it },
-    )
+        value = outLineTextField,
+        onValueChange = {
+            outLineTextField = it
+            viewModel.outLineTxtFieldValue = it
+        },
+
+        )
 
 }
 
 @Composable
-fun DropDownMenu() {
+fun DropDownMenu(
+    viewModel: ExchangeMainViewModel = hiltViewModel()
+) {
 
 
     var expanded1 by remember { mutableStateOf(false) }
     var expanded2 by remember { mutableStateOf(false) }
 
-    var selectedItem1 by remember { mutableStateOf("Select Item") }
-    var selectedItem2 by remember { mutableStateOf("Select Item") }
+    var selectedItem1 by remember { mutableStateOf("") }
+    var selectedItem2 by remember { mutableStateOf("") }
+
 
     val itemList1 = listOf(
         "USD", "TRY", "EUR", "AMD", "AFN", "BGN"
@@ -105,20 +125,21 @@ fun DropDownMenu() {
         "USD", "TRY", "EUR", "AMD", "AFN", "BGN"
     )
 
-    /*  Column(
-          Modifier
-              .fillMaxSize()
-              .padding(vertical = 20.dp),
-          verticalArrangement = Arrangement.Top,
-          Alignment.CenterHorizontally
-      ) {*/
+    /* Column(
+           Modifier
+               .fillMaxSize()
+               .padding(vertical = 20.dp),
+           verticalArrangement = Arrangement.Top,
+           Alignment.CenterHorizontally
+       ) {*/
 
     Box {
         Row(
             modifier = Modifier.fillMaxWidth(),
+            Arrangement.Center,
             verticalAlignment = Alignment.Top
-        ) {
 
+        ) {
 
             Button(
                 modifier = Modifier
@@ -126,7 +147,7 @@ fun DropDownMenu() {
                 colors = ButtonDefaults.buttonColors(backgroundColor = lightGray2),
                 onClick = { expanded1 = true }) {
                 Row {
-                    Text("$selectedItem1  ")
+                    Text("$selectedItem1")
                     Icon(Icons.Default.ArrowDropDown, "")
                 }
             }
@@ -139,6 +160,7 @@ fun DropDownMenu() {
                         onClick = {
                             expanded1 = false
                             selectedItem1 = it
+                            viewModel.dropDownMenuItem1 = it
                         }
                     ) { Text(it) }
                 }
@@ -175,6 +197,7 @@ fun DropDownMenu() {
                         onClick = {
                             expanded2 = false
                             selectedItem2 = it
+                            viewModel.dropDownMenuItem2 = it
                         }
                     ) { Text(it) }
                 }
@@ -183,24 +206,40 @@ fun DropDownMenu() {
 
     }
 
+}
 
+@Composable
+fun FinalAmountTxt(result: String) {
+
+    Text(
+        text = "final amount:${result}",
+        modifier = Modifier.padding(3.dp)
+    )
 
 }
 
 @Composable
-fun finalAmountTxt(result:String) {
+fun ExchangeBtn(
+    context: Context,
+    viewModel: ExchangeMainViewModel = hiltViewModel(),
 
-   Text(
-       text = "final amount:${result}",
-       modifier = Modifier.padding(3.dp) )
+    ) {
 
-}
-@Composable
-fun ExchangeBtn() {
+
+
+    val conversionValue = viewModel.firstConversionValue
+    val conversionValue2 = viewModel.secondConversionValue
 
     Button(
         onClick =
         {
+
+            val result = viewModel.check(context)
+
+            if (result) {
+                viewModel.onConfirmClick()
+            }
+
 
         },
 
@@ -221,16 +260,126 @@ fun ExchangeBtn() {
         Text(text = "Exchange")
     }
 
+    if (viewModel.isDialogShown) {
+
+        AlertDialog(
+            onDismiss = {
+                viewModel.onDismissClick()
+            },
+            onConfirm = {
+
+               viewModel.getFirstConversionRateByCurrency(viewModel.dropDownMenuItem1)
+               viewModel.getSecondConversionRateByCurrency(viewModel.dropDownMenuItem2)
+
+                println(conversionValue)
+                println(conversionValue2)
+            }
+        )
+    }
+
 }
 
 
 @Composable
-fun roundedTxt(base_code:String,exchange_value:Double,exchange_currency:String){
+fun RoundedTxt(base_code: String, exchange_value: Double, exchange_currency: String) {
 
+    Text(text = "1 $base_code = $exchange_value $exchange_currency")
 
-
-   Text(text = "1 $base_code = $exchange_value $exchange_currency")
-    
 }
 
+
+@Composable
+fun AlertDialog(
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+    viewModel: ExchangeMainViewModel = hiltViewModel()
+) {
+    Dialog(
+        onDismissRequest = {
+            onDismiss()
+        }
+    ) {
+        Card(
+            elevation = 5.dp,
+            shape = RoundedCornerShape(15.dp),
+            modifier = Modifier
+                .fillMaxWidth(0.95f)
+                .border(2.dp, color = orangish, shape = RoundedCornerShape(15.dp))
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp),
+                verticalArrangement = Arrangement.spacedBy(25.dp)
+            ) {
+
+                Text(
+                    text = "Confirm Operation.",
+                    style = MaterialTheme.typography.h6,
+                    textAlign = TextAlign.Center
+                )
+
+                Text(
+                    text = "" +
+                            "Are you sure you want to convert from " +
+                            "${viewModel.outLineTxtFieldValue.text}" +
+                            " ${viewModel.dropDownMenuItem1} to ${viewModel.dropDownMenuItem2}?",
+
+                    textAlign = TextAlign.Center
+                )
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(30.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(
+                        onClick = {
+                            onDismiss()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Teal200,
+                            contentColor = Color.White
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        shape = CircleShape
+                    ) {
+                        Text(
+                            text = "Cancel",
+                            style = MaterialTheme.typography.subtitle1,
+                            fontWeight = FontWeight.Normal,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            onConfirm()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Teal200,
+                            contentColor = Color.White
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        shape = CircleShape
+                    ) {
+                        Text(
+                            text = "Confirm",
+                            style = MaterialTheme.typography.subtitle1,
+                            fontWeight = FontWeight.Normal,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }
+
+            }
+        }
+    }
+
+
+}
 

@@ -1,6 +1,7 @@
 package com.enestigli.diyetkolikcase.domain.model
 
 import com.enestigli.diyetkolikcase.data.locale.entity.ExchangeEntity
+import kotlin.collections.HashMap
 
 data class Exchange(
     val result :String,
@@ -10,6 +11,6 @@ data class Exchange(
     fun toEntity() = ExchangeEntity(
         result = result,
         conversion_rates = conversionRates,
-        base_code = base_code
+        base_code = base_code,
     )
 }

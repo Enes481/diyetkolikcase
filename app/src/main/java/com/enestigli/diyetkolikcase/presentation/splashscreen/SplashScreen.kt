@@ -1,6 +1,8 @@
 package com.enestigli.diyetkolikcase.presentation.splashscreen
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.provider.Settings.Global.putString
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -19,6 +21,8 @@ import androidx.navigation.NavController
 import com.enestigli.diyetkolikcase.R
 import com.enestigli.diyetkolikcase.util.Screen
 import kotlinx.coroutines.delay
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Composable
 fun SplashScreen(
@@ -27,7 +31,21 @@ fun SplashScreen(
 ) {
 
 
+    val sdf = SimpleDateFormat("yyyy-MM-dd")
+    val currentDate = sdf.format(Date())
+
     val context: Context = LocalContext.current
+
+    val sharedPreferences = context.getSharedPreferences("date",Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+
+    editor.apply{
+
+        putString("date",currentDate)
+
+    }.apply()
+
+    println(sharedPreferences.getString("date","defaeult"))
 
     val scale = remember {
         Animatable(0f)

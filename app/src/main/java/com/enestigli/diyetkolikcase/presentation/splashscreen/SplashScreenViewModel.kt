@@ -14,6 +14,7 @@ class SplashScreenViewModel @Inject constructor(
 ) : ViewModel() {
 
 
+
     init {
         insertExchanges()
     }

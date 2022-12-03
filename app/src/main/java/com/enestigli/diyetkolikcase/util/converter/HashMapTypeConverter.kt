@@ -14,7 +14,7 @@ class HashMapTypeConverter {
     }
 
     @TypeConverter
-    fun covertStringToMap(json: String): HashMap<String,Double> {
+    fun covertStringToMap(json: String):  HashMap<String,Double> {
         val gson = Gson()
         val typeToken = object : TypeToken<HashMap<String,Double>>() {}.type
         return Gson().fromJson(json, typeToken)
