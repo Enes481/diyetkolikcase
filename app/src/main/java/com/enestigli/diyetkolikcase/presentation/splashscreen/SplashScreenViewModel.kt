@@ -8,6 +8,8 @@ import com.enestigli.diyetkolikcase.domain.usecase.getall.GetAllExchangeUseCase
 import com.enestigli.diyetkolikcase.domain.usecase.insert.InsertExchangeUseCase
 import com.enestigli.diyetkolikcase.domain.usecase.update.UpdateExchangeUseCase
 import com.enestigli.diyetkolikcase.util.Constants.DEFAULT_CURRENCY
+import com.enestigli.diyetkolikcase.util.Constants.PREF_DEFAULT_VALUE
+import com.enestigli.diyetkolikcase.util.Constants.PREF_SAVED_KEY
 import com.enestigli.diyetkolikcase.util.SharedPrefHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -24,13 +26,13 @@ class SplashScreenViewModel @Inject constructor(
 
     init {
 
-        if(sharedPrefHelper.getStringFromShared().equals("def"))
+        if(sharedPrefHelper.getStringFromShared().equals(PREF_DEFAULT_VALUE))
             insertExchanges()
 
     }
 
     private fun isInsertToRoom(){
-        sharedPrefHelper.setStringToShared("saved")
+        sharedPrefHelper.setStringToShared(PREF_SAVED_KEY)
     }
 
     private fun insertExchanges() {

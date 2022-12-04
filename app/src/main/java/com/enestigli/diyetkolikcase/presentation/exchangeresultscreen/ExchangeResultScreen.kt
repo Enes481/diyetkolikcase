@@ -1,6 +1,5 @@
 package com.enestigli.diyetkolikcase.presentation.exchangeresultscreen
 
-import android.graphics.Paint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -11,10 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.fontResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,11 +27,6 @@ fun ExchangeResultScreen(
     viewModel: ExchangeResultViewModel = hiltViewModel()
 
 ) {
-
-    /* println("result ${viewModel.result}")
-     println("input value  ${viewModel.inputValue}")
-     println("firstConversion ${viewModel.firstConversion}")
-     println("secondConversion : -- >>${viewModel.secondConversion}")*/
 
 
 
@@ -56,10 +48,8 @@ fun ExchangeResultScreen(
             text = "Success",
             textAlign = TextAlign.Center,
             fontFamily = FontFamily.Monospace,
-            fontSize = 14.sp
+            fontSize = 22.sp
         )
-
-
 
 
         Text(
@@ -71,9 +61,8 @@ fun ExchangeResultScreen(
 
             textAlign = TextAlign.Center,
             fontFamily = FontFamily.Monospace,
-            fontSize = 14.sp
+            fontSize = 18.sp
         )
-
 
 
         Spacer(modifier = Modifier.padding(120.dp))

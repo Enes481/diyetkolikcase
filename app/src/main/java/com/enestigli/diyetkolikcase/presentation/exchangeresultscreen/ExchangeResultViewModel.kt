@@ -1,20 +1,13 @@
 package com.enestigli.diyetkolikcase.presentation.exchangeresultscreen
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.enestigli.diyetkolikcase.util.Constants.FIRST_CONVERSION_KEY
-import com.enestigli.diyetkolikcase.util.Constants.FIRST_CONVERSION_RATE_KEY
 import com.enestigli.diyetkolikcase.util.Constants.INPUT_VALUE_KEY
 import com.enestigli.diyetkolikcase.util.Constants.RESULT_OF_EXCHANGE_KEY
 import com.enestigli.diyetkolikcase.util.Constants.SECOND_CONVERSION_KEY
-import com.enestigli.diyetkolikcase.util.Constants.SECOND_CONVERSION_RATE_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
