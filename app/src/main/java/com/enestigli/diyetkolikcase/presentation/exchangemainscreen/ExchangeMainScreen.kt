@@ -30,9 +30,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.enestigli.diyetkolikcase.R
 import com.enestigli.diyetkolikcase.ui.theme.*
+import com.enestigli.diyetkolikcase.util.Screen
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -40,7 +44,6 @@ fun ExchangeMainScreen(
     navController: NavController,
     viewModel: ExchangeMainViewModel = hiltViewModel()
 ) {
-
 
 
     val context = LocalContext.current
@@ -59,12 +62,13 @@ fun ExchangeMainScreen(
         OutLineTextFieldSample()
         Spacer(modifier = Modifier.padding(5.dp))
 
-        FinalAmountTxt(result = " $ 102")
+        FinalAmountTxt()
         Spacer(modifier = Modifier.padding(30.dp))
 
-        RoundedTxt(base_code = "$", exchange_value = 20.0, exchange_currency = "eur")
+        RoundedTxt()
+
         Spacer(modifier = Modifier.padding(5.dp))
-        ExchangeBtn(context)
+        ExchangeBtn(context,navController)
 
     }
 
@@ -209,26 +213,32 @@ fun DropDownMenu(
 }
 
 @Composable
-fun FinalAmountTxt(result: String) {
+fun FinalAmountTxt(
+    viewModel: ExchangeMainViewModel = hiltViewModel()
+) {
 
-    Text(
-        text = "final amount:${result}",
-        modifier = Modifier.padding(3.dp)
-    )
+
+    if (!viewModel.resultState.equals(0.0)) {
+
+
+        Text(
+            text = "Final Amount: ${viewModel.dropDownMenuItem2} ${viewModel.resultState}",
+            modifier = Modifier.padding(3.dp)
+        )
+
+    }
+
 
 }
 
 @Composable
 fun ExchangeBtn(
     context: Context,
-    viewModel: ExchangeMainViewModel = hiltViewModel(),
+    navController: NavController,
+    viewModel: ExchangeMainViewModel = hiltViewModel()
 
-    ) {
+) {
 
-
-
-    val conversionValue = viewModel.firstConversionValue
-    val conversionValue2 = viewModel.secondConversionValue
 
     Button(
         onClick =
@@ -239,7 +249,6 @@ fun ExchangeBtn(
             if (result) {
                 viewModel.onConfirmClick()
             }
-
 
         },
 
@@ -268,11 +277,33 @@ fun ExchangeBtn(
             },
             onConfirm = {
 
-               viewModel.getFirstConversionRateByCurrency(viewModel.dropDownMenuItem1)
-               viewModel.getSecondConversionRateByCurrency(viewModel.dropDownMenuItem2)
+               // viewModel.getConversionRateByCurrency()
 
-                println(conversionValue)
-                println(conversionValue2)
+                viewModel.onDismissClick()
+                //viewModel.calculate()
+
+                println(viewModel.resultState)
+
+
+
+/*
+                if(!viewModel.resultState.equals(0.0))
+                    println("resultState **** >> ${viewModel.resultState}")*/
+               // println("conversionrate first **** >> ${viewModel.firstConversionRate}")
+
+               /*navController.navigate(
+                    Screen.ExchangeResultScreen.passArgsToResultExchangeScreen(
+                        viewModel.outLineTxtFieldValue.text,
+                        viewModel.dropDownMenuItem1,
+                        viewModel.dropDownMenuItem2,
+                        viewModel.resultState,
+                        viewModel.firstConversionRate.toString(),
+                        viewModel.secondConversionRate.toString()
+
+                    )
+                )
+*/
+
             }
         )
     }
@@ -281,9 +312,13 @@ fun ExchangeBtn(
 
 
 @Composable
-fun RoundedTxt(base_code: String, exchange_value: Double, exchange_currency: String) {
+fun RoundedTxt(
+    viewModel: ExchangeMainViewModel = hiltViewModel()
+) {
 
-    Text(text = "1 $base_code = $exchange_value $exchange_currency")
+
+    if (!viewModel.secondConversionRate.equals(0.0))
+        Text(text = "1 ${viewModel.dropDownMenuItem1} = ${viewModel.dropDownMenuItem2} ${viewModel.secondConversionRate}")
 
 }
 

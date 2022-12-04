@@ -6,12 +6,15 @@ import com.enestigli.diyetkolikcase.domain.usecase.insert.InsertExchangeUseCase
 import com.enestigli.diyetkolikcase.util.Constants.DEFAULT_CURRENCY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashScreenViewModel @Inject constructor(
     private val insertExchangeUseCase: InsertExchangeUseCase
 ) : ViewModel() {
+
 
 
 
@@ -23,6 +26,7 @@ class SplashScreenViewModel @Inject constructor(
     private fun insertExchanges() {
 
         viewModelScope.launch {
+
             insertExchangeUseCase.insert(DEFAULT_CURRENCY)
         }
 

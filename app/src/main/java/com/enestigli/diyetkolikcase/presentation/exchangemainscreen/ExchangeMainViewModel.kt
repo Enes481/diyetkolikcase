@@ -2,30 +2,24 @@ package com.enestigli.diyetkolikcase.presentation.exchangemainscreen
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.enestigli.diyetkolikcase.data.remote.FirstConversionValue
-import com.enestigli.diyetkolikcase.data.remote.SecondConversionValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.enestigli.diyetkolikcase.domain.usecase.getall.GetAllExchangeUseCase
 import com.enestigli.diyetkolikcase.domain.usecase.getconversionratebycurrency.GetConversionRateByCurrencyUseCase
 import com.enestigli.diyetkolikcase.domain.usecase.insert.InsertExchangeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ExchangeMainViewModel @Inject constructor(
     private val exchangeInsertUseCase: InsertExchangeUseCase,
-    private val exchangeGetAllUseCase:GetAllExchangeUseCase,
+    private val exchangeGetAllUseCase: GetAllExchangeUseCase,
     private val getConversionRateByCurrencyUseCase: GetConversionRateByCurrencyUseCase
 ) : ViewModel() {
 
@@ -38,15 +32,17 @@ class ExchangeMainViewModel @Inject constructor(
 
     var outLineTxtFieldValue by mutableStateOf(TextFieldValue(""))
 
-    var firstConversionValue by mutableStateOf<FirstConversionValue?>(null)
-    var secondConversionValue by mutableStateOf<SecondConversionValue?>(null)
+    var firstConversionRate by mutableStateOf(0.0)
+    var secondConversionRate by mutableStateOf(0.0)
+
+    var resultState by mutableStateOf(0.0)
 
 
-    private val _state = mutableStateOf(ExchangeState())
-    var state:State<ExchangeState> = _state
 
-    fun onConfirmClick(){
+    fun onConfirmClick() {
         isDialogShown = true
+        getConversionRateByCurrency()
+        resultState = calculate()
     }
 
     fun onDismissClick() {
@@ -54,45 +50,55 @@ class ExchangeMainViewModel @Inject constructor(
     }
 
 
-    fun check(context: Context) : Boolean{
+    fun check(context: Context): Boolean {
 
-        if(outLineTxtFieldValue.text.isNullOrEmpty() || dropDownMenuItem1 == "" || dropDownMenuItem2 == ""){
+        if (outLineTxtFieldValue.text.isNullOrEmpty() || dropDownMenuItem1 == "" || dropDownMenuItem2 == "") {
 
-            Toast.makeText(context,"please select a value and currency ",Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "please select a value and currency ", Toast.LENGTH_LONG).show()
             return false
         }
         return true
 
     }
 
-   fun getFirstConversionRateByCurrency(currency:String)   {
-
-
-
-       viewModelScope.launch {
-
-           val first = getConversionRateByCurrencyUseCase.getConversionRateByCurrency(currency)
-           firstConversionValue = FirstConversionValue(first)
-
-       }
-
-
-   }
-
-    fun getSecondConversionRateByCurrency(currency:String)  {
-
+    fun getConversionRateByCurrency() {
 
         viewModelScope.launch {
 
+            val firstRate = async {
+                getConversionRateByCurrencyUseCase.getConversionRateByCurrency(dropDownMenuItem1)
 
-            val second = getConversionRateByCurrencyUseCase.getConversionRateByCurrency(currency)
-            secondConversionValue = SecondConversionValue(second)
+            }
+
+            val secondRate = async {
+                getConversionRateByCurrencyUseCase.getConversionRateByCurrency(dropDownMenuItem2)
+            }
 
 
+            firstConversionRate = firstRate.await()
+            secondConversionRate = secondRate.await()
+            delay(200L)
+
+            val result = async {
+                calculate()
+            }
+
+            resultState = result.await()
+
+        }
+    }
+
+    private fun calculate(): Double {
+
+        if (!firstConversionRate.equals(0.0) && !secondConversionRate.equals(0.0)) {
+
+            val amount = outLineTxtFieldValue.text.toInt()
+            val resultOfCalculate = (amount / firstConversionRate) * secondConversionRate
+            return resultOfCalculate
 
         }
 
-
+        return 1.1
     }
 
 }

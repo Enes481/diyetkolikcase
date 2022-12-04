@@ -1,8 +1,6 @@
 package com.enestigli.diyetkolikcase.presentation.splashscreen
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.provider.Settings.Global.putString
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -23,6 +21,9 @@ import com.enestigli.diyetkolikcase.util.Screen
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.math.roundToInt
+
 
 @Composable
 fun SplashScreen(
@@ -31,25 +32,31 @@ fun SplashScreen(
 ) {
 
 
-    val sdf = SimpleDateFormat("yyyy-MM-dd")
-    val currentDate = sdf.format(Date())
+
 
     val context: Context = LocalContext.current
 
     val sharedPreferences = context.getSharedPreferences("date",Context.MODE_PRIVATE)
     val editor = sharedPreferences.edit()
 
-    editor.apply{
 
-        putString("date",currentDate)
+    val date = Date(System.currentTimeMillis())
+    val millis = date.time
+
+
+   editor.apply{
+
+       putLong("currentDate",millis)
 
     }.apply()
 
-    println(sharedPreferences.getString("date","defaeult"))
+
+    println(sharedPreferences.getLong("currentDate",1))
 
     val scale = remember {
         Animatable(0f)
     }
+
     LaunchedEffect(key1 = true) {
         scale.animateTo(
             targetValue = 0.3f,
@@ -62,7 +69,7 @@ fun SplashScreen(
         )
 
 
-        delay(3000L)
+        delay(2000L)
         navController.navigate(Screen.ExchangeMainScreen.route)
     }
 
@@ -80,6 +87,16 @@ fun SplashScreen(
 
 
 }
+
+
+
+/*fun countDaysBetweenTwoCalendar(calendarStart: Calendar, calendarEnd: Calendar) : Int{
+
+    val millionSeconds = calendarEnd.timeInMillis - calendarStart.timeInMillis
+    val days = TimeUnit.MILLISECONDS.toDays(millionSeconds) //this way not round number
+    val daysRounded = (millionSeconds / (1000.0 * 60 * 60 * 24)).roundToInt()
+    return daysRounded
+}*/
 
 
 

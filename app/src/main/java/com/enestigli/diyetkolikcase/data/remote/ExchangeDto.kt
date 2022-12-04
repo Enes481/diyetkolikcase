@@ -24,12 +24,5 @@ data class ExchangeDto(
     )
 }
 
-data class FirstConversionValue(
-    val first : Double
 
-)
-
-data class SecondConversionValue(
-    val second:Double
-)
 
