@@ -12,5 +12,5 @@ object  Constants {
     const val RESULT_OF_EXCHANGE_KEY = "result"
     const val FIRST_CONVERSION_RATE_KEY = "conversionRate1"
     const val SECOND_CONVERSION_RATE_KEY = "conversionRate2"
-
+    const val PREF_NAME = "isSaved"
 }

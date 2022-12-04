@@ -67,7 +67,6 @@ class ExchangeMainViewModel @Inject constructor(
 
             val firstRate = async {
                 getConversionRateByCurrencyUseCase.getConversionRateByCurrency(dropDownMenuItem1)
-
             }
 
             val secondRate = async {

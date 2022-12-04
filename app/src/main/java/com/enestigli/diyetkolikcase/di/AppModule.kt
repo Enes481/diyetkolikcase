@@ -8,6 +8,7 @@ import com.enestigli.diyetkolikcase.data.remote.ExchangeApi
 import com.enestigli.diyetkolikcase.data.repository.ExchangeRepositoryImpl
 import com.enestigli.diyetkolikcase.domain.repository.ExchangeRepository
 import com.enestigli.diyetkolikcase.util.Constants
+import com.enestigli.diyetkolikcase.util.SharedPrefHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -58,6 +59,9 @@ object AppModule {
         return ExchangeRepositoryImpl(dao,api)
     }
 
-   
+
+    @Singleton
+    @Provides
+    fun provideSharedPrefHelper(@ApplicationContext context:Context)  = SharedPrefHelper(context)
 
 }
