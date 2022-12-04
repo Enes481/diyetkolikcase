@@ -1,6 +1,5 @@
 package com.enestigli.diyetkolikcase.domain.usecase.getall
 
-import com.enestigli.diyetkolikcase.data.remote.ExchangeDto
 import com.enestigli.diyetkolikcase.domain.model.Exchange
 import com.enestigli.diyetkolikcase.domain.repository.ExchangeRepository
 import javax.inject.Inject

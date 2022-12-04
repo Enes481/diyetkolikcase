@@ -3,6 +3,7 @@ package com.enestigli.diyetkolikcase.data.locale.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlin.collections.HashMap
 
 @Entity(tableName = "ExchangeValues")
 data class ExchangeEntity(
@@ -13,3 +14,5 @@ data class ExchangeEntity(
     @PrimaryKey(autoGenerate = true) val uid:Int?=null
 
 )
+
+
