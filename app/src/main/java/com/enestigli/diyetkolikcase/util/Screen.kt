@@ -14,18 +14,16 @@ sealed class Screen(val route:String) {
     object SplashScreen          : Screen(route = "splash_screen")
 
 
-    object ExchangeResultScreen  : Screen(route ="exchange_result_screen/{$INPUT_VALUE_KEY}/{$FIRST_CONVERSION_KEY}/{$SECOND_CONVERSION_KEY}/{$RESULT_OF_EXCHANGE_KEY}/{$FIRST_CONVERSION_RATE_KEY}/{$SECOND_CONVERSION_RATE_KEY}"
+    object ExchangeResultScreen  : Screen(route ="exchange_result_screen/{$INPUT_VALUE_KEY}/{$FIRST_CONVERSION_KEY}/{$SECOND_CONVERSION_KEY}/{$RESULT_OF_EXCHANGE_KEY}"
     ){
         fun passArgsToResultExchangeScreen(
             input_value:String,
             firstConversion:String,
             secondConversion:String,
             result:Double,
-            firstConversionRate:String,
-            secondConversionRate:String,
         ) : String {
 
-            return "exchange_result_screen/$input_value/$firstConversion/$secondConversion/$result/$firstConversionRate/$secondConversionRate"
+            return "exchange_result_screen/$input_value/$firstConversion/$secondConversion/$result"
 
         }
     }

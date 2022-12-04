@@ -20,7 +20,10 @@ interface ExchangeDao {
   /* @Query("SELECT * FROM ExchangeValues ")
     suspend fun getConversionRateByCurrency(currency : String) : Double*/
 
-    @Query("UPDATE ExchangeValues SET  base_code=:base_code,conversion_rates=:conversion_rates , result=:result")
-    suspend fun update(base_code:String, conversion_rates:HashMap<String,Double>, result:String)
+    @Query("SELECT EXISTS (SELECT 1 FROM ExchangeValues WHERE uid=:id)")
+    suspend fun exists(id: Int): Boolean
+
+    @Query("UPDATE ExchangeValues SET  base_code=:base_code,conversion_rates=:conversion_rates , result=:result WHERE uid =:id")
+    suspend fun update(base_code:String, conversion_rates:HashMap<String,Double>, result:String,id:Int)
 
 }

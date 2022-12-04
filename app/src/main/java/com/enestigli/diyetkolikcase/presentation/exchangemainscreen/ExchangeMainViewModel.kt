@@ -18,8 +18,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExchangeMainViewModel @Inject constructor(
-    private val exchangeInsertUseCase: InsertExchangeUseCase,
-    private val exchangeGetAllUseCase: GetAllExchangeUseCase,
     private val getConversionRateByCurrencyUseCase: GetConversionRateByCurrencyUseCase
 ) : ViewModel() {
 
@@ -42,11 +40,13 @@ class ExchangeMainViewModel @Inject constructor(
     fun onConfirmClick() {
         isDialogShown = true
         getConversionRateByCurrency()
-        resultState = calculate()
+
     }
 
     fun onDismissClick() {
+
         isDialogShown = false
+
     }
 
 
@@ -61,7 +61,7 @@ class ExchangeMainViewModel @Inject constructor(
 
     }
 
-    fun getConversionRateByCurrency() {
+    private fun getConversionRateByCurrency() {
 
         viewModelScope.launch {
 
@@ -74,27 +74,25 @@ class ExchangeMainViewModel @Inject constructor(
                 getConversionRateByCurrencyUseCase.getConversionRateByCurrency(dropDownMenuItem2)
             }
 
-
             firstConversionRate = firstRate.await()
             secondConversionRate = secondRate.await()
-            delay(200L)
+
 
             val result = async {
                 calculate()
             }
-
             resultState = result.await()
 
         }
     }
+
 
     private fun calculate(): Double {
 
         if (!firstConversionRate.equals(0.0) && !secondConversionRate.equals(0.0)) {
 
             val amount = outLineTxtFieldValue.text.toInt()
-            val resultOfCalculate = (amount / firstConversionRate) * secondConversionRate
-            return resultOfCalculate
+            return (amount / firstConversionRate) * secondConversionRate
 
         }
 

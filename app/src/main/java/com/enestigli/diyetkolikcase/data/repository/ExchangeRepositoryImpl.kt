@@ -44,9 +44,9 @@ class ExchangeRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun update(exchange: ExchangeDto) {
+    override suspend fun update(exchange: Exchange) {
 
-        dao.update(exchange.base_code, exchange.conversion_rates, exchange.result)
+        dao.update(exchange.base_code, exchange.conversionRates, exchange.result,1)
     }
 
 

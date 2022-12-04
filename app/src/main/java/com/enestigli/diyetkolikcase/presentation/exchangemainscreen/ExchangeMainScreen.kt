@@ -1,6 +1,7 @@
 package com.enestigli.diyetkolikcase.presentation.exchangemainscreen
 
 import android.content.Context
+import android.widget.TextView
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -32,6 +33,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.navOptions
 import com.enestigli.diyetkolikcase.R
 import com.enestigli.diyetkolikcase.ui.theme.*
 import com.enestigli.diyetkolikcase.util.Screen
@@ -68,7 +70,7 @@ fun ExchangeMainScreen(
         RoundedTxt()
 
         Spacer(modifier = Modifier.padding(5.dp))
-        ExchangeBtn(context,navController)
+        ExchangeBtn(context, navController)
 
     }
 
@@ -129,46 +131,44 @@ fun DropDownMenu(
         "USD", "TRY", "EUR", "AMD", "AFN", "BGN"
     )
 
-    /* Column(
-           Modifier
-               .fillMaxSize()
-               .padding(vertical = 20.dp),
-           verticalArrangement = Arrangement.Top,
-           Alignment.CenterHorizontally
-       ) {*/
+
 
     Box {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            Arrangement.Center,
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Top
-
         ) {
 
-            Button(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(5.dp)),
-                colors = ButtonDefaults.buttonColors(backgroundColor = lightGray2),
-                onClick = { expanded1 = true }) {
-                Row {
-                    Text("$selectedItem1")
-                    Icon(Icons.Default.ArrowDropDown, "")
+
+            Column(modifier = Modifier.padding(1.dp)) {
+                Button(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(5.dp)),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = lightGray2),
+                    onClick = { expanded1 = true }) {
+                    Row {
+                        Text("$selectedItem1")
+                        Icon(Icons.Default.ArrowDropDown, "")
+                    }
                 }
-            }
-            DropdownMenu(
-                expanded = expanded1,
-                onDismissRequest = { expanded1 = false },
-            ) {
-                itemList1.forEach {
-                    DropdownMenuItem(
-                        onClick = {
-                            expanded1 = false
-                            selectedItem1 = it
-                            viewModel.dropDownMenuItem1 = it
-                        }
-                    ) { Text(it) }
+                DropdownMenu(
+                    expanded = expanded1,
+                    onDismissRequest = { expanded1 = false },
+                ) {
+                    itemList1.forEach {
+                        DropdownMenuItem(
+                            onClick = {
+                                expanded1 = false
+                                selectedItem1 = it
+                                viewModel.dropDownMenuItem1 = it
+                            }
+                        ) { Text(it) }
+                    }
                 }
+
             }
+
 
             Spacer(modifier = Modifier.padding(4.dp))
 
@@ -180,33 +180,42 @@ fun DropDownMenu(
 
             Spacer(modifier = Modifier.padding(4.dp))
 
-            Button(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(5.dp)),
-                colors = ButtonDefaults.buttonColors(backgroundColor = lightGray2),
-                onClick = { expanded2 = true }) {
-                Row {
-                    Text("$selectedItem2  ")
-                    Icon(Icons.Default.ArrowDropDown, "")
-                }
-            }
 
-
-            DropdownMenu(
-                expanded = expanded2,
-                onDismissRequest = { expanded2 = false },
+            Column(
+                modifier = Modifier.padding(1.dp)
             ) {
-                itemList2.forEach {
-                    DropdownMenuItem(
-                        onClick = {
-                            expanded2 = false
-                            selectedItem2 = it
-                            viewModel.dropDownMenuItem2 = it
-                        }
-                    ) { Text(it) }
+
+                Button(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(5.dp)),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = lightGray2),
+                    onClick = { expanded2 = true }) {
+                    Row {
+                        Text("$selectedItem2  ")
+                        Icon(Icons.Default.ArrowDropDown, "")
+                    }
+                }
+
+
+                DropdownMenu(
+                    expanded = expanded2,
+                    onDismissRequest = { expanded2 = false },
+                ) {
+                    itemList2.forEach {
+                        DropdownMenuItem(
+                            onClick = {
+                                expanded2 = false
+                                selectedItem2 = it
+                                viewModel.dropDownMenuItem2 = it
+                            }
+                        ) { Text(it) }
+                    }
                 }
             }
+
+
         }
+
 
     }
 
@@ -277,32 +286,21 @@ fun ExchangeBtn(
             },
             onConfirm = {
 
-               // viewModel.getConversionRateByCurrency()
-
                 viewModel.onDismissClick()
-                //viewModel.calculate()
 
-                println(viewModel.resultState)
-
-
-
-/*
-                if(!viewModel.resultState.equals(0.0))
-                    println("resultState **** >> ${viewModel.resultState}")*/
-               // println("conversionrate first **** >> ${viewModel.firstConversionRate}")
-
-               /*navController.navigate(
+                navController.navigate(
                     Screen.ExchangeResultScreen.passArgsToResultExchangeScreen(
                         viewModel.outLineTxtFieldValue.text,
                         viewModel.dropDownMenuItem1,
                         viewModel.dropDownMenuItem2,
                         viewModel.resultState,
-                        viewModel.firstConversionRate.toString(),
-                        viewModel.secondConversionRate.toString()
-
-                    )
+                    ),
+                    navOptions {
+                        restoreState= true
+                        launchSingleTop=true
+                    }
                 )
-*/
+
 
             }
         )

@@ -25,19 +25,16 @@ class ExchangeResultViewModel @Inject constructor(
     private val _inputValue: String? = savedStateHandle.get(INPUT_VALUE_KEY)
     private val _firstConversion: String? = savedStateHandle.get(FIRST_CONVERSION_KEY)
     private val _secondConversion: String? = savedStateHandle.get(SECOND_CONVERSION_KEY)
+    private val _result:Float? = savedStateHandle.get(RESULT_OF_EXCHANGE_KEY)
 
-    private val _result:String? = savedStateHandle.get(RESULT_OF_EXCHANGE_KEY)
-    private val _firstConversionRate: String? = savedStateHandle.get(FIRST_CONVERSION_RATE_KEY)
-    private val _secondConversionRate: String? = savedStateHandle.get(SECOND_CONVERSION_RATE_KEY)
 
 
     var inputValue = _inputValue
     var firstConversion = _firstConversion
     var secondConversion = _secondConversion
-
     var result = _result
-    var firstConversionRate = _firstConversionRate
-    var secondConversionRate = _secondConversionRate
+
+
 
 
 

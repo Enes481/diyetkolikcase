@@ -22,6 +22,7 @@ import javax.inject.Singleton
 object AppModule {
 
 
+
     /*-------------------------- Exchange  --------------------------*/
 
     @Provides
@@ -57,6 +58,6 @@ object AppModule {
         return ExchangeRepositoryImpl(dao,api)
     }
 
-
+   
 
 }

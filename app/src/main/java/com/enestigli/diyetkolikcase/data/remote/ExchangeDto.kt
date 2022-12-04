@@ -21,6 +21,7 @@ data class ExchangeDto(
         conversionRates = conversion_rates,
         result = result,
 
+
     )
 }
 
