@@ -1,8 +1,6 @@
 package com.enestigli.diyetkolikcase.presentation.splashscreen
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.provider.Settings
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -17,16 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.enestigli.diyetkolikcase.R
 import com.enestigli.diyetkolikcase.util.Screen
-import dagger.hilt.android.internal.Contexts
 import kotlinx.coroutines.delay
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.math.roundToInt
 
 
 @Composable
@@ -100,32 +94,8 @@ fun checkDate(context:Context,viewModel: SplashScreenViewModel){
     }
 
 
-
 }
 
-fun checkRoomDb(
-    viewModel: SplashScreenViewModel,
-    context: Context
-){
-
-
-
-    /* val sharedPreferences = context.getSharedPreferences("flag",Context.MODE_PRIVATE)
-     val editor = sharedPreferences.edit()
-
-     val trueFlag = "Saved"
-
-
-     if(viewModel.isSaved){
-
-         editor.apply{
-             putString("isSavedDataToRoom",trueFlag)
-         }.apply()
-     }*/
-
-
-
-}
 
 
 

@@ -6,13 +6,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.enestigli.diyetkolikcase.domain.usecase.getall.GetAllExchangeUseCase
 import com.enestigli.diyetkolikcase.domain.usecase.getconversionratebycurrency.GetConversionRateByCurrencyUseCase
-import com.enestigli.diyetkolikcase.domain.usecase.insert.InsertExchangeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -52,9 +48,12 @@ class ExchangeMainViewModel @Inject constructor(
 
     fun check(context: Context): Boolean {
 
-        if (outLineTxtFieldValue.text.isNullOrEmpty() || dropDownMenuItem1 == "" || dropDownMenuItem2 == "") {
+        if (outLineTxtFieldValue.text.isNullOrEmpty() ||
+            dropDownMenuItem1 == "" ||
+            dropDownMenuItem2 == ""  ||
+            outLineTxtFieldValue.text.toInt() <= 0 ) {
 
-            Toast.makeText(context, "please select a value and currency ", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Please Enter The Fields Correctly And Completely !", Toast.LENGTH_LONG).show()
             return false
         }
         return true

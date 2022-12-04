@@ -1,14 +1,12 @@
 package com.enestigli.diyetkolikcase.presentation.exchangemainscreen
 
 import android.content.Context
-import android.widget.TextView
-import android.widget.Toast
+import android.text.InputType
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -24,21 +22,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.navOptions
 import com.enestigli.diyetkolikcase.R
 import com.enestigli.diyetkolikcase.ui.theme.*
 import com.enestigli.diyetkolikcase.util.Screen
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 
 
 @Composable
@@ -85,7 +79,9 @@ fun OutLineTextFieldSample(
 
     var outLineTextField by remember { mutableStateOf(TextFieldValue("")) }
 
+
     OutlinedTextField(
+
         label = {
             Text(
                 text = "Enter currency amount",
@@ -336,7 +332,8 @@ fun AlertDialog(
             elevation = 5.dp,
             shape = RoundedCornerShape(15.dp),
             modifier = Modifier
-                .fillMaxWidth(0.95f)
+                .padding(15.dp)
+                .fillMaxWidth()
                 .border(2.dp, color = orangish, shape = RoundedCornerShape(15.dp))
         ) {
             Column(
@@ -356,7 +353,7 @@ fun AlertDialog(
                     text = "" +
                             "Are you sure you want to convert from " +
                             "${viewModel.outLineTxtFieldValue.text}" +
-                            " ${viewModel.dropDownMenuItem1} to ${viewModel.dropDownMenuItem2}?",
+                            " ${viewModel.dropDownMenuItem1} to ${viewModel.dropDownMenuItem2} ${String.format("%.3f",viewModel.resultState).toDouble()}?",
 
                     textAlign = TextAlign.Center
                 )
