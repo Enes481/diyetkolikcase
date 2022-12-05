@@ -7,9 +7,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -17,8 +15,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.enestigli.diyetkolikcase.R
+import com.enestigli.diyetkolikcase.util.Constants.PREF_DEFAULT_VALUE
+import com.enestigli.diyetkolikcase.util.Constants.PREF_NAME
 import com.enestigli.diyetkolikcase.util.Screen
+import com.enestigli.diyetkolikcase.util.SharedPrefHelper
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -26,11 +28,22 @@ import java.util.concurrent.TimeUnit
 @Composable
 fun SplashScreen(
     navController: NavController,
-    viewModel : SplashScreenViewModel = hiltViewModel()
+    viewModel : SplashScreenViewModel = hiltViewModel(),
+
 ) {
 
 
     val context: Context = LocalContext.current
+    val sharedPreference =  context.getSharedPreferences(PREF_NAME,Context.MODE_PRIVATE)
+
+    val state by viewModel.state.collectAsState()
+    println("sasasrasd"+state)
+
+   /* if(sharedPreference.getString(PREF_NAME).equals(PREF_DEFAULT_VALUE)){
+        viewModel.insertExchanges()
+    }
+*/
+
     checkDate(context,viewModel)
 
     val scale = remember {
@@ -49,8 +62,11 @@ fun SplashScreen(
         )
 
 
-        delay(2000L)
-        navController.navigate(Screen.ExchangeMainScreen.route)
+
+        delay(3000L)
+
+        if(state == 1 )
+            navController.navigate(Screen.ExchangeMainScreen.route)
     }
 
 

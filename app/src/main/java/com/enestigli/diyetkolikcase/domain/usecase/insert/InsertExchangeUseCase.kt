@@ -9,8 +9,8 @@ class InsertExchangeUseCase @Inject constructor(
 ) {
 
 
-    suspend fun insert(currency: String) {
+    suspend fun insert(currency: String) : Long{
 
-        repository.initData(currency)
+        return repository.initData(currency)
     }
 }
