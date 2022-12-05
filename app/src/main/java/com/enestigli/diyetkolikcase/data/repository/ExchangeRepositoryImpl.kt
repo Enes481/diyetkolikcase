@@ -12,9 +12,6 @@ class ExchangeRepositoryImpl @Inject constructor(
 ) : ExchangeRepository {
 
 
-    /* private val exchangeLiveData = MutableLiveData<Exchange>()
-     val exchanges : LiveData<Exchange> = exchangeLiveData*/
-
 
     override suspend fun get(currency: String): Exchange {
 
@@ -26,15 +23,14 @@ class ExchangeRepositoryImpl @Inject constructor(
 
          return dao.getAll().conversion_rates.entries.find { it.key == currency }!!.value
 
-
      }
 
 
-    override suspend fun initData(currency: String) {
+    override suspend fun initData(currency: String) : Long {
 
         val result = api.getExchangeValues(currency)
 
-        dao.initData(result.toDomain().toEntity())
+        return dao.initData(result.toDomain().toEntity())
 
     }
 

@@ -85,7 +85,7 @@ class ExchangeMainViewModel @Inject constructor(
     }
 
 
-    private fun calculate(): Double {
+    private fun calculate() : Double {
 
         if (!firstConversionRate.equals(0.0) && !secondConversionRate.equals(0.0)) {
 

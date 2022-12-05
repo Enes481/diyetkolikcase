@@ -15,7 +15,7 @@ interface ExchangeDao {
     suspend fun getAll() : ExchangeEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun initData(exchanges : ExchangeEntity)
+    suspend fun initData(exchanges : ExchangeEntity) : Long
 
   /* @Query("SELECT * FROM ExchangeValues ")
     suspend fun getConversionRateByCurrency(currency : String) : Double*/
